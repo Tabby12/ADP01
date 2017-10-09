@@ -1,54 +1,69 @@
 package AB1;
+
 /**
  * Das Interface für eine Menge.
  *
- * @param <Element> Elementtyp der Menge
+ * @param <T> Elementtyp der Menge
  * 
  * @author Helena Lajevardi
  */
-public interface Set<Element> {
-	
+public interface Set<T> {
+
 	/**
 	 * Fügt der Menge ein Element hinzu.
 	 * 
-	 * @param element das Element, dass hinzugefügt werden soll.
+	 * @param element das Element, dass hinzugefügt werden soll
+	 * 
+	 * @throws NullPointerException if {@code element == null}
 	 * 
 	 * @return die Position an der das Element hinzugefügt wurde.
 	 */
-	int add(Element element);
-	
+	int add(Element<T> element);
+
 	/**
 	 * Löscht an der Position ein Element aus der Menge.
 	 * 
-	 * @param pos die Position an der das Element gelöscht werden soll.
+	 * @param pos die Position an der das Element gelöscht werden soll
+	 * 
+	 * @throws IndexOutOfBoundsException if {@code pos < 0}
+	 * @throws IndexOutOfBoundsException if {@code pos >} Listengröße
+	 * 
 	 */
 	void delete(int pos);
-	
+
 	/**
 	 * Löscht anhand eines Schlüssels ein Element aus der Menge.
 	 * 
 	 * @param key der Schlüssel des zu löschenden Elements.
+	 * 
+	 * @throws NullPointerException if {@code key == null}
+	 * 
 	 */
 	void delete(Key key);
-	
+
 	/**
 	 * Findet ein Element aus der Menge und gibt die Positon zurück.
 	 * 
-	 * @param key der Schlüssel mit dem die Position gefunden werden soll.
+	 * @param key der Schlüssel mit dem die Position gefunden werden soll
+	 * 
+	 * @throws NullPointerException if {@code key == null}
 	 * 
 	 * @return die Position des gesuchten Elements.
 	 */
 	int find(Key key);
-	
+
 	/**
 	 * Liefert ein Element aus der Menge zurück.
 	 * 
-	 * @param pos die Position des Elements, dass zurück geliefert werden soll.
+	 * @param pos die Position des Elements, dass zurück geliefert werden soll
+	 * 
+	 * @throws IndexOutOfBoundsException if {@code pos < 0}
+	 * @throws IndexOutOfBoundsException if {@code pos >} Listengröße
 	 * 
 	 * @return das Element, dass zurückgeliefert wird.
 	 */
-	Element retrieve(int pos);
-	
+	Element<T> retrieve(int pos);
+
 	/**
 	 * Zeigt alle Elemente der Menge an.
 	 */
@@ -60,16 +75,16 @@ public interface Set<Element> {
 	 * @return Anzahl der Elemente in der Menge
 	 */
 	int size();
-	
+
 	/**
 	 * Verbindet zwei Mengen miteinander.
 	 * 
-	 * @param set die Menge mit der vereinigt werden soll.
+	 * @param set die Menge mit der vereinigt werden soll
 	 * 
-	 * return die neue Menge.
+	 * @throws NullPointerException if {@code set == null}
+	 * 
+	 * @return die neue Menge.
 	 */
-	Set<Element> unify(Set<Element> set);
-	
+	Set<T> unify(Set<T> set);
 
 }
-
