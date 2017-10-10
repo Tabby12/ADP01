@@ -18,7 +18,7 @@ public interface Set<T> {
 	 * 
 	 * @return die Position an der das Element hinzugefügt wurde.
 	 */
-	int add(Element<T> element);
+	Pos add(Element<T> element);
 
 	/**
 	 * Löscht an der Position ein Element aus der Menge.
@@ -29,7 +29,7 @@ public interface Set<T> {
 	 * @throws IndexOutOfBoundsException if {@code pos >} Listengröße
 	 * 
 	 */
-	void delete(int pos);
+	void delete(Pos pos);
 
 	/**
 	 * Löscht anhand eines Schlüssels ein Element aus der Menge.
@@ -50,7 +50,7 @@ public interface Set<T> {
 	 * 
 	 * @return die Position des gesuchten Elements.
 	 */
-	int find(Key key);
+	Pos find(Key key);
 
 	/**
 	 * Liefert ein Element aus der Menge zurück.
@@ -62,7 +62,7 @@ public interface Set<T> {
 	 * 
 	 * @return das Element, dass zurückgeliefert wird.
 	 */
-	Element<T> retrieve(int pos);
+	Element<T> retrieve(Pos pos);
 
 	/**
 	 * Zeigt alle Elemente der Menge an.
