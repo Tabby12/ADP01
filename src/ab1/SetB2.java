@@ -43,20 +43,20 @@ public class SetB2<T> implements Set<T> {
 	 * 
 	 * @return den Knoten an gewünschter Position.
 	 */
-	private Node2<T> getNode(int pos) {
+	private Node2<T> getNode(Pos<T> pos) {
 
 		Node2<T> result = null;
 
-		if (pos <= size / 2) {
+		if (pos.getIndex() <= size / 2) {
 			// Suche vorwärts
 			result = head;
-			for (int curNode = -1; curNode < pos; curNode++) {
+			for (int curNode = -1; curNode < pos.getIndex(); curNode++) {
 				result = result.getNext();
 			}
 		} else {
 			// Suche rückwärts
 			result = tail;
-			for (int curNode = size; curNode > pos; curNode--) {
+			for (int curNode = size; curNode > pos.getIndex(); curNode--) {
 				result = result.getPrevious();
 			}
 		}
@@ -65,7 +65,7 @@ public class SetB2<T> implements Set<T> {
 	}
 
 	@Override
-	public int add(Element<T> element) {
+	public Pos<T> add(Element<T> element) {
 
 		// Precondition
 		if (element == null) {
@@ -73,10 +73,10 @@ public class SetB2<T> implements Set<T> {
 		}
 
 		//Prüfen, ob Element bereits in der Menge
-		int pos = find(element.getKey());
+		Pos<T> pos = find(element.getKey());
 
-		if (pos != -1) {
-			return -1;
+		if (pos.isValid()) {
+			return new Pos<T>(false, null, -1);
 		}
 
 		// Neues Element einhängen
@@ -88,14 +88,14 @@ public class SetB2<T> implements Set<T> {
 
 		size++;
 
-		return size - 1;
+		return new Pos<T>(true, element, size);
 	}
 
 	@Override
-	public void delete(int pos) {
+	public void delete(Pos<T> pos) {
 
 		// Preconditions
-		if (pos < 0 || pos > size) {
+		if (pos.getIndex() < 0 || pos.getIndex() > size) {
 			throw new IndexOutOfBoundsException();
 		}
 		// Element aus Kette entfernen
@@ -115,15 +115,15 @@ public class SetB2<T> implements Set<T> {
 			throw new NullPointerException();
 
 		// Suche Element und lösche, falls gefunden
-		int pos = find(key);
-		if (pos > -1) {
+		Pos<T> pos = find(key);
+		if (pos.isValid()) {
 			delete(pos);
 		}
 
 	}
 
 	@Override
-	public int find(Key key) {
+	public Pos<T> find(Key key) {
 
 		// Preconditions
 		if (key == null)
@@ -144,21 +144,15 @@ public class SetB2<T> implements Set<T> {
 		}
 
 		if (curNode == tail) {
-			return -1;
+			return new Pos<T>(false, null, -1);
 		}
 
-		return curPos;
+		return new Pos<T>(true, curNode.getElement(), curPos);
 	}
 
 	@Override
-	public Element<T> retrieve(int pos) {
-
-		// Preconditions
-		if (pos < 0 || pos > size)
-			throw new IndexOutOfBoundsException();
-
-		//Gibt Element an gewünschter Position zurück
-		return getNode(pos).getElement();
+	public Element<T> retrieve(Pos<T> pos) {
+		return pos.getReference();
 	}
 
 	@Override
@@ -185,16 +179,14 @@ public class SetB2<T> implements Set<T> {
 			throw new NullPointerException();
 		}
 
-		//Mengen vereinigen
-		for (int i = 0; i < set.size(); i++) {
-			Element<T> element = set.retrieve(i);
-			int pos = find(element.getKey());
-			if (pos == -1) {
-				add(element);
-			}
+		Node2<T> curNode = head.getNext();
+
+		while (curNode != tail) {
+			set.add(curNode.getElement());
+			curNode = curNode.getNext();
 		}
 
-		return this;
+		return set;
 	}
 
 }

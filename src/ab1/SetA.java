@@ -149,13 +149,11 @@ public class SetA<T> implements Set<T> {
 		}
 
 		//Mengen vereinigen
-		for (int i = 0; i < set.size(); i++) {
-			Element<T> element = set.retrieve();
-			add(element);
-
+		for (int i = 0; i < size(); i++) {
+			set.add(elements[i]);
 		}
 
-		return this;
+		return set;
 	}
 
 }

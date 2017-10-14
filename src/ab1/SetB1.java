@@ -41,40 +41,40 @@ public class SetB1<T> implements Set<T> {
 	}
 
 	@Override
-	public int add(Element<T> element) {
+	public Pos<T> add(Element<T> element) {
 
 		if (element == null) {
 			throw new NullPointerException();
 		}
 
-		int pos = find(element.getKey());
+		Pos<T> pos = find(element.getKey());
 
-		if (pos != -1) {
-			return -1;
+		if (pos.isValid()) {
+			return new Pos<T>(false, null, -1);
 		}
 
-		pos = size;
+		int index = size;
 
-		if (pos >= nodes.length) {
+		if (index >= nodes.length) {
 			enlargeArray();
 		}
 
-		nodes[pos] = new Node1<T>(element, pos);
+		nodes[index] = new Node1<T>(element, index);
 		size++;
 
 		return pos;
 	}
 
 	@Override
-	public void delete(int pos) {
+	public void delete(Pos<T> pos) {
 
-		if (pos < 0 || pos >= size) {
+		if (pos.getIndex() < 0 || pos.getIndex() >= size) {
 			throw new IndexOutOfBoundsException();
 		}
 
-		nodes[pos] = null;
+		nodes[pos.getIndex()] = null;
 
-		for (int i = pos + 1; i < size; i++) {
+		for (int i = pos.getIndex() + 1; i < size; i++) {
 			nodes[i - 1] = nodes[i];
 		}
 		size--;
@@ -88,15 +88,15 @@ public class SetB1<T> implements Set<T> {
 			throw new NullPointerException();
 		}
 
-		int pos = find(key);
-		if (pos > -1) {
+		Pos<T> pos = find(key);
+		if (pos.isValid()) {
 			delete(pos);
 		}
 
 	}
 
 	@Override
-	public int find(Key key) {
+	public Pos<T> find(Key key) {
 
 		if (key == null) {
 			throw new NullPointerException();
@@ -104,20 +104,15 @@ public class SetB1<T> implements Set<T> {
 
 		for (int i = 0; i < size; i++) {
 			if (nodes[i].getElement().getKey().getValue().equals(key.getValue())) {
-				return i;
+				return new Pos<T>(true, nodes[i].getElement(), i);
 			}
 		}
-		return -1;
+		return new Pos<T>(false, null, -1);
 	}
 
 	@Override
-	public Element<T> retrieve(int pos) {
-
-		if (pos < 0 || pos >= size) {
-			throw new IndexOutOfBoundsException();
-		}
-
-		return nodes[pos].getElement();
+	public Element<T> retrieve(Pos<T> pos) {
+		return pos.getReference();
 	}
 
 	@Override
@@ -141,15 +136,11 @@ public class SetB1<T> implements Set<T> {
 			throw new NullPointerException();
 		}
 
-		for (int i = 0; i < set.size(); i++) {
-			Element<T> element = set.retrieve(i);
-			int pos = find(element.getKey());
-			if (pos == -1) {
-				add(element);
-			}
+		for (int i = 0; i <size(); i++) {
+			set.add(nodes[i].getElement());
 		}
 
-		return this;
+		return set;
 	}
 
 }

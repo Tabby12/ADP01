@@ -14,7 +14,7 @@ public class Pos<T> {
 
 		this.isValid = isValid;
 		this.reference = reference;
-
+		this.index = index;
 	}
 
 	public boolean isValid() {

@@ -53,7 +53,7 @@ public class SetC<T> implements Set<T> {
 	}
 
 	@Override
-	public int add(Element<T> element) {
+	public Pos<T> add(Element<T> element) {
 
 		// Precondition
 		if (element == null) {
@@ -61,38 +61,38 @@ public class SetC<T> implements Set<T> {
 		}
 
 		//Prüfen, ob Element bereits in der Menge
-		int pos = find(element.getKey());
+		Pos<T> pos = find(element.getKey());
 
-		if (pos != -1) {
-			return -1;
+		if (pos.isValid()) {
+			return new Pos<T>(false, null, -1);
 		}
 
 		// Neues Element einhängen
 		Node2<T> newNode = new Node2<T>(element);
 		Node2<T> curNode = head;
-		pos = 0;
+		int index = 0;
 		while (curNode.getNext() != tail) {
 			curNode = curNode.getNext();
-			pos++;
+			index++;
 
 		}
 		curNode.setNext(newNode);
 		newNode.setNext(tail);
 
 		size++;
-		return pos;
+		return new Pos<T>(true, element, index);
 	}
 
 	@Override
-	public void delete(int pos) {
+	public void delete(Pos<T> pos) {
 
 		// Preconditions
-		if (pos < 0 || pos > size) {
+		if (pos.getIndex() < 0 || pos.getIndex() > size) {
 			throw new IndexOutOfBoundsException();
 		}
 
 		// Hole Element vor dem Gesuchten und ändere Referenzen
-		Node2<T> preElementToDelete = getNode(pos - 1);
+		Node2<T> preElementToDelete = getNode(pos.getIndex() - 1);
 		preElementToDelete.setNext(preElementToDelete.getNext().getNext());
 
 		size--;
@@ -107,14 +107,14 @@ public class SetC<T> implements Set<T> {
 		}
 
 		// Try to find and delete Element
-		int pos = find(key);
-		if (pos > -1) {
+		Pos<T> pos = find(key);
+		if (pos.isValid()) {
 			delete(pos);
 		}
 	}
 
 	@Override
-	public int find(Key key) {
+	public Pos<T> find(Key key) {
 
 		// Preconditions
 		if (key == null)
@@ -135,25 +135,19 @@ public class SetC<T> implements Set<T> {
 		}
 
 		if (curNode == tail) {
-			return -1;
+			return new Pos<T>(false, null, -1);
 		}
 
-		return curPos;
+		return new Pos<T>(true, curNode.getElement(), curPos);
 	}
 
 	@Override
-	public Element<T> retrieve(int pos) {
-
-		// Preconditions
-		if (pos < 0 || pos >= size)
-			throw new IndexOutOfBoundsException();
-
-		return getNode(pos).getElement();
+	public Element<T> retrieve(Pos<T> pos) {
+		return pos.getReference();
 	}
 
 	@Override
 	public void showall() {
-
 		// Ausgabe der Elemente auf der Konsole
 		Node2<T> curNode = head.getNext();
 		while (curNode != tail) {
@@ -175,16 +169,14 @@ public class SetC<T> implements Set<T> {
 			throw new NullPointerException();
 		}
 
-		//Mengen vereinigen
-		for (int i = 0; i < set.size(); i++) {
-			Element<T> element = set.retrieve(i);
-			int pos = find(element.getKey());
-			if (pos == -1) {
-				add(element);
-			}
+		Node2<T> curNode = head.getNext();
+
+		while (curNode != tail) {
+			set.add(curNode.getElement());
+			curNode = curNode.getNext();
 		}
 
-		return this;
+		return set;
 	}
 
 }

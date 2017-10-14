@@ -15,15 +15,22 @@ public class SetTest {
 	/**
 	 * Instanz der zu testenden Menge.
 	 */
-	private Set<String> set = new SetC<>();
+	private Set<String> set = new SetB2<>();
+	
+	private Pos<String> pos0;
+	private Pos<String> pos1;
+	private Pos<String> pos2;
+	@SuppressWarnings("unused")
+	private Pos<String> pos3;
+	private Pos<String> pos4;
 
 	@Before
 	public void setUp() throws Exception {
-		set.add(new Element<String>("Douglas Adams"));
-		set.add(new Element<String>("Hitchhiker"));
-		set.add(new Element<String>("Marvin"));
-		set.add(new Element<String>("BTI3-ADP"));
-		set.add(new Element<String>("HAW-Hamburg"));
+		pos0 = set.add(new Element<String>("Douglas Adams"));
+		pos1 = set.add(new Element<String>("Hitchhiker"));
+		pos2 = set.add(new Element<String>("Marvin"));
+		pos3 = set.add(new Element<String>("BTI3-ADP"));
+		pos4 = set.add(new Element<String>("HAW-Hamburg"));
 	}
 
 	/**
@@ -32,9 +39,9 @@ public class SetTest {
 	@Test
 	public void testAddRetrieve() {
 		// Einfügen am Anfang
-		set.add(new Element<String>("Anfang"));
+		Pos<String> pos = set.add(new Element<String>("Anfang"));
 		assertEquals(set.size(), 6);
-		assertEquals(set.retrieve(5).getData(), "Anfang");
+		assertEquals(set.retrieve(pos).getData(), "Anfang");
 	}
 
 	/**
@@ -43,19 +50,19 @@ public class SetTest {
 	@Test
 	public void testDelete() {
 		// Entfernen am Anfang
-		set.delete(0);
+		set.delete(pos0);
 		assertEquals(set.size(), 4);
-		assertEquals(set.retrieve(0).getData(), "Hitchhiker");
+		assertEquals(set.retrieve(pos0).getData(), "Hitchhiker");
 
 		// Entfernen in der Mitte
-		set.delete(2);
+		set.delete(pos2);
 		assertEquals(set.size(), 3);
-		assertEquals(set.retrieve(2).getData(), "HAW-Hamburg");
+		assertEquals(set.retrieve(pos2).getData(), "HAW-Hamburg");
 
 		// Entfernen am Ende
-		set.delete(2);
+		set.delete(pos2);
 		assertEquals(set.size(), 2);
-		assertEquals(set.retrieve(1).getData(), "Marvin");
+		assertEquals(set.retrieve(pos1).getData(), "Marvin");
 	}
 
 	/**
@@ -64,13 +71,13 @@ public class SetTest {
 	@Test
 	public void testKeyOperations() {
 		// Finde Element anhand von Key
-		assertEquals(set.find(set.retrieve(1).getKey()), 1);
-		assertEquals(set.find(set.retrieve(0).getKey()), 0);
-		assertEquals(set.find(new Key()), -1);
+		assertEquals(set.find(set.retrieve(pos1).getKey()).getIndex(), 1);
+		assertEquals(set.find(set.retrieve(pos0).getKey()).getIndex(), 0);
+		assertEquals(set.find(new Key()).getIndex(), -1);
 
 		// Teste Löschen anhand von Key
-		set.delete(set.retrieve(0).getKey());
-		assertEquals(set.retrieve(0).getData(), "Hitchhiker");
+		set.delete(set.retrieve(pos0).getKey());
+		assertEquals(set.retrieve(pos0).getData(), "Hitchhiker");
 	}
 
 	/**
@@ -80,17 +87,17 @@ public class SetTest {
 	public void testUnify() {
 		// Erzeuge neue Menge und fülle mit Inhalt
 		Set<String> secondSet = new SetC<>();
-		secondSet.add(new Element<String>("2: A"));
-		secondSet.add(new Element<String>("2: B"));
+		Pos<String> pos5 = secondSet.add(new Element<String>("2: A"));
+		Pos<String> pos6 = secondSet.add(new Element<String>("2: B"));
 
 		// Vereinige Mengen und überprüfe Ergebnis
 		Set<String> unifiedSet = set.unify(secondSet);
 
 		assertEquals(unifiedSet.size(), 7);
-		assertEquals(set.retrieve(0).getData(), "Douglas Adams");
-		assertEquals(set.retrieve(4).getData(), "HAW-Hamburg");
-		assertEquals(set.retrieve(5).getData(), "2: A");
-		assertEquals(set.retrieve(6).getData(), "2: B");
+		assertEquals(set.retrieve(pos0).getData(), "Douglas Adams");
+		assertEquals(set.retrieve(pos4).getData(), "HAW-Hamburg");
+		assertEquals(set.retrieve(pos5).getData(), "2: A");
+		assertEquals(set.retrieve(pos6).getData(), "2: B");
 	}
 
 	/**
@@ -106,17 +113,18 @@ public class SetTest {
 	 */
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testPreconditionDeletePosNegativ() {
-		set.delete(-1);
+		set.delete(new Pos<String>(true, null, -1));
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testPreconditionDeleteTooLarge() {
-		set.delete(9000);
+		set.delete(new Pos<String>(true, null, 9000));
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testPreconditionDeleteNull() {
-		set.delete(null);
+		Key key = null;
+		set.delete(key);
 	}
 
 	/**
@@ -125,19 +133,6 @@ public class SetTest {
 	@Test(expected = NullPointerException.class)
 	public void testPreconditionFindNull() {
 		set.find(null);
-	}
-
-	/**
-	 * Teste Preconditions für retrieve
-	 */
-	@Test(expected = IndexOutOfBoundsException.class)
-	public void testPreconditionRetrievePosNegativ() {
-		set.retrieve(-1);
-	}
-
-	@Test(expected = IndexOutOfBoundsException.class)
-	public void testPreconditionRetrieveTooLarge() {
-		set.retrieve(9000);
 	}
 
 	/**
