@@ -1,11 +1,11 @@
-package AB1;
+package ab1;
 
 /**
- * Repräsentation einer Mengenimplementation als einfach verkettete Liste.
+ * Repräsentation einer Mengenimplementation als Doppelt verkettete Liste.
  * 
  * @author Helena Lajevardi
  */
-public class SetC<T> implements Set<T> {
+public class SetB2<T> implements Set<T> {
 
 	/**
 	 * Linker Wächterknoten.
@@ -25,12 +25,13 @@ public class SetC<T> implements Set<T> {
 	/**
 	 * Konstruktor.
 	 */
-	public SetC() {
+	public SetB2() {
+
 		head = new Node2<T>(null);
 		tail = new Node2<T>(null);
 
 		head.setNext(tail);
-		tail.setNext(head);
+		tail.setPrevious(head);
 
 		size = 0;
 	}
@@ -44,12 +45,23 @@ public class SetC<T> implements Set<T> {
 	 */
 	private Node2<T> getNode(int pos) {
 
-		Node2<T> node = head;
+		Node2<T> result = null;
 
-		for (int curPos = -1; curPos < pos; curPos++) {
-			node = node.getNext();
+		if (pos <= size / 2) {
+			// Suche vorwärts
+			result = head;
+			for (int curNode = -1; curNode < pos; curNode++) {
+				result = result.getNext();
+			}
+		} else {
+			// Suche rückwärts
+			result = tail;
+			for (int curNode = size; curNode > pos; curNode--) {
+				result = result.getPrevious();
+			}
 		}
-		return node;
+
+		return result;
 	}
 
 	@Override
@@ -69,18 +81,14 @@ public class SetC<T> implements Set<T> {
 
 		// Neues Element einhängen
 		Node2<T> newNode = new Node2<T>(element);
-		Node2<T> curNode = head;
-		pos = 0;
-		while (curNode.getNext() != tail) {
-			curNode = curNode.getNext();
-			pos++;
-
-		}
-		curNode.setNext(newNode);
+		tail.getPrevious().setNext(newNode);
+		newNode.setPrevious(tail.getPrevious());
 		newNode.setNext(tail);
+		tail.setPrevious(newNode);
 
 		size++;
-		return pos;
+
+		return size - 1;
 	}
 
 	@Override
@@ -90,27 +98,28 @@ public class SetC<T> implements Set<T> {
 		if (pos < 0 || pos > size) {
 			throw new IndexOutOfBoundsException();
 		}
-
-		// Hole Element vor dem Gesuchten und ändere Referenzen
-		Node2<T> preElementToDelete = getNode(pos - 1);
-		preElementToDelete.setNext(preElementToDelete.getNext().getNext());
+		// Element aus Kette entfernen
+		Node2<T> elementToDelete = getNode(pos);
+		elementToDelete.getPrevious().setNext(elementToDelete.getNext());
+		elementToDelete.getNext().setPrevious(elementToDelete.getPrevious());
 
 		size--;
+
 	}
 
 	@Override
 	public void delete(Key key) {
 
 		// Preconditions
-		if (key == null) {
+		if (key == null)
 			throw new NullPointerException();
-		}
 
-		// Try to find and delete Element
+		// Suche Element und lösche, falls gefunden
 		int pos = find(key);
 		if (pos > -1) {
 			delete(pos);
 		}
+
 	}
 
 	@Override
@@ -145,9 +154,10 @@ public class SetC<T> implements Set<T> {
 	public Element<T> retrieve(int pos) {
 
 		// Preconditions
-		if (pos < 0 || pos >= size)
+		if (pos < 0 || pos > size)
 			throw new IndexOutOfBoundsException();
 
+		//Gibt Element an gewünschter Position zurück
 		return getNode(pos).getElement();
 	}
 

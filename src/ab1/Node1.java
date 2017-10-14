@@ -1,39 +1,42 @@
-package AB1;
+package ab1;
 
-public class Node2<T> {
-	
+public class Node1<T> {
+
 	/**
 	 * Gespeichertes Element.
 	 */
 	private Element<T> element;
-	
+
 	/**
 	 * Ggf. vorhandener Vorgängerknoten.
 	 */
-	private Node2<T> next;
-	
+	private int next;
+
 	/**
 	 * Ggf. vorhandender Nachfolgerknoten.
 	 */
-	private Node2<T> previous;
-	
-	public Node2(Element<T> element) {
+	private int previous;
+
+	public Node1(Element<T> element, int pos) {
 		this.element = element;
+		this.next = pos + 1;
+		this.previous = pos - 1;
+
 	}
-	
-	public Node2<T> getNext() {
+
+	public int getNext() {
 		return next;
 	}
 
-	public void setNext(Node2<T> next) {
+	public void setNext(int next) {
 		this.next = next;
 	}
 
-	public Node2<T> getPrevious() {
+	public int getPrevious() {
 		return previous;
 	}
 
-	public void setPrevious(Node2<T> previous) {
+	public void setPrevious(int previous) {
 		this.previous = previous;
 	}
 
@@ -44,7 +47,5 @@ public class Node2<T> {
 	public void setElement(Element<T> element) {
 		this.element = element;
 	}
-	
-	
 
 }

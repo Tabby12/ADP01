@@ -1,4 +1,4 @@
-package AB1;
+package ab1;
 
 /**
  * Diese Klasse repräsentiert ein Element.

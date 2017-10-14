@@ -1,4 +1,4 @@
-package AB1;
+package ab1;
 
 /**
  * Das Interface für eine Menge.
@@ -18,18 +18,16 @@ public interface Set<T> {
 	 * 
 	 * @return die Position an der das Element hinzugefügt wurde.
 	 */
-	Pos add(Element<T> element);
+	Pos<T> add(Element<T> element);
 
 	/**
 	 * Löscht an der Position ein Element aus der Menge.
 	 * 
 	 * @param pos die Position an der das Element gelöscht werden soll
 	 * 
-	 * @throws IndexOutOfBoundsException if {@code pos < 0}
-	 * @throws IndexOutOfBoundsException if {@code pos >} Listengröße
 	 * 
 	 */
-	void delete(Pos pos);
+	void delete(Pos<T> pos);
 
 	/**
 	 * Löscht anhand eines Schlüssels ein Element aus der Menge.
@@ -50,19 +48,17 @@ public interface Set<T> {
 	 * 
 	 * @return die Position des gesuchten Elements.
 	 */
-	Pos find(Key key);
+	Pos<T> find(Key key);
 
 	/**
 	 * Liefert ein Element aus der Menge zurück.
 	 * 
 	 * @param pos die Position des Elements, dass zurück geliefert werden soll
 	 * 
-	 * @throws IndexOutOfBoundsException if {@code pos < 0}
-	 * @throws IndexOutOfBoundsException if {@code pos >} Listengröße
 	 * 
 	 * @return das Element, dass zurückgeliefert wird.
 	 */
-	Element<T> retrieve(Pos pos);
+	Element<T> retrieve(Pos<T> pos);
 
 	/**
 	 * Zeigt alle Elemente der Menge an.

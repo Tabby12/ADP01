@@ -1,4 +1,4 @@
-package AB1;
+package ab1;
 import java.util.UUID;
 /**
  * Key-Element für Mengenmodelierungen.
