@@ -17,11 +17,10 @@ public class Node1<T> {
 	 */
 	private int previous;
 
-	public Node1(Element<T> element, int pos) {
+	public Node1(Element<T> element) { //pos Argument nicht nötig
 		this.element = element;
-		this.next = pos + 1;
-		this.previous = pos - 1;
-
+//		this.next = pos + 1;
+//		this.previous = pos - 1;
 	}
 
 	public int getNext() {

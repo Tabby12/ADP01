@@ -14,6 +14,7 @@ public class SetB1<T> implements Set<T> {
 	 * Anzahl der aktuell in der Menge vorhandenen Elemente.
 	 */
 	private int size;
+	private int idx;
 
 	/**
 	 * Array zur Datenspeicherung
@@ -26,7 +27,9 @@ public class SetB1<T> implements Set<T> {
 	@SuppressWarnings("unchecked")
 	public SetB1() {
 		nodes = (Node1<T>[]) Array.newInstance(Node1.class, 2);
+		idx = 1;
 		size = 0;
+		nodes[0] = new Node1<T>(null);	
 	}
 
 	/**
@@ -50,19 +53,29 @@ public class SetB1<T> implements Set<T> {
 		Pos<T> pos = find(element.getKey());
 
 		if (pos.isValid()) {
-			return new Pos<T>(false, null, -1);
+			return pos; //return new Pos<T>(false, null, -1); 
 		}
-
-		int index = size;
-
-		if (index >= nodes.length) {
+		int index = idx;
+		
+		if(index + 1 >=  nodes.length){
 			enlargeArray();
 		}
 
-		nodes[index] = new Node1<T>(element, index);
-		size++;
+//		if (index >= nodes.length) {
+//			enlargeArray();
+//		}
+		int determinePrev = idx;
+		nodes[index] = new Node1<T>(element);
+		nodes[index].setNext(index+1);
+		do {
+			determinePrev--;
+		} while(nodes[determinePrev] == null);
 
-		return pos;
+		nodes[index].setPrevious(determinePrev); //????
+		size++;
+		idx++;
+
+		return new Pos<T> (true, element,index);  //return pos;
 	}
 
 	@Override
@@ -71,13 +84,27 @@ public class SetB1<T> implements Set<T> {
 		if (pos.getIndex() < 0 || pos.getIndex() >= size) {
 			throw new IndexOutOfBoundsException();
 		}
+		
+		if(nodes[pos.getIndex()] != null) {
+			int next = nodes[pos.getIndex()].getNext();
+			int prev = nodes[pos.getIndex()].getPrevious();
+			if(nodes[next] != null) {
+				nodes[next].setPrevious(prev);
+			}	
+			if(nodes[prev] != null) {
+				nodes[prev].setNext(next);
+			}
+			nodes[pos.getIndex()] = null;
+			pos.setValid(false);
+			size--;
+		}	
 
-		nodes[pos.getIndex()] = null;
+//		nodes[pos.getIndex()] = null;
 
-		for (int i = pos.getIndex() + 1; i < size; i++) {
-			nodes[i - 1] = nodes[i];
-		}
-		size--;
+//		for (int i = pos.getIndex() + 1; i < size; i++) {
+//			nodes[i - 1] = nodes[i];
+//		}
+//		size--;
 
 	}
 
@@ -131,11 +158,10 @@ public class SetB1<T> implements Set<T> {
 
 	@Override
 	public Set<T> unify(Set<T> set) {
-
 		if (set == null) {
 			throw new NullPointerException();
 		}
-
+		
 		for (int i = 0; i <size(); i++) {
 			set.add(nodes[i].getElement());
 		}
