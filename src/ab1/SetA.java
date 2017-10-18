@@ -81,8 +81,9 @@ public class SetA<T> implements Set<T> {
 			for (int i = pos.getIndex() + 1; i < size; i++) {
 				elements[i - 1] = elements[i];
 			}
-
 			size--;
+			elements[size] = null;
+
 		}
 	}
 

@@ -10,6 +10,7 @@ public abstract class SetTestNeu<T>
 {
 	private Set<T> _s;
 	Element<Integer> _elem;
+	
 	public abstract Set<T> erzeugeSet();
 	
 	@Before
@@ -25,16 +26,19 @@ public abstract class SetTestNeu<T>
 	{
 		_elem = null;
 		assertTrue(_s.size() == 0);
+		_elem = new Element<Integer>(new Integer(6),new Key());
+		_s.add((Element<T>) _elem);
+		
 		for(int i = 0; i < 5; i++)
 		{
 			_elem = new Element<Integer>(new Integer(i));
 			_s.add((Element<T>) _elem);
 		}
-		assertTrue(_s.size() == 5);
+		assertTrue(_s.size() == 6);
 		//selbes Element nochmal adden
 		_s.add((Element<T>) _elem);
 
-		assertTrue(_s.size() == 5);
+		assertTrue(_s.size() == 6);
 		
 		for(int i = 5; i < 50; i++)
 		{
@@ -42,7 +46,7 @@ public abstract class SetTestNeu<T>
 			_s.add((Element<T>) _elem);
 		}
 		
-		assertTrue(_s.size() == 50);
+		assertTrue(_s.size() == 51);
 		//sucht nach bereits enthaltenem key returnte Pos sollte valid sein
 		assertTrue(_s.find(_elem.getKey()).isValid());
 		
@@ -53,7 +57,7 @@ public abstract class SetTestNeu<T>
 			_elem = new Element<Integer>(new Integer(i));
 			_s.add((Element<T>) _elem);
 		}
-		assertTrue(_s.size() == 1000);
+		assertTrue(_s.size() == 1001);
 		
 	}
 	
@@ -80,12 +84,12 @@ public abstract class SetTestNeu<T>
 		
 //		assertFalse(s.find(elem.getKey()).isValid());
 		
-		for(int i = 0; i < 99; i++)
+		for(int i = 0; i < 50; i++)
 		{
 			_s.delete(keys[i]);
 		}
 		
-		assertTrue(_s.size() == 0);
+		assertTrue(_s.size() == 49);
 		
 		for(int i = 0; i < 200; i++)
 		{
@@ -93,13 +97,13 @@ public abstract class SetTestNeu<T>
 			_s.add((Element<T>) _elem);
 			keys[i] = _elem.getKey();
 		}
-		assertTrue(_s.size() == 200);
+		assertTrue(_s.size() == 249);
 		//40 elemente in der mitte löschen
 		for(int i = 80; i < 120; i++)
 		{
 			_s.delete(keys[i]);
 		}
-		assertTrue(_s.size() == 160);
+		assertTrue(_s.size() == 209);
 		
 //		s.find(keys[100])
 		

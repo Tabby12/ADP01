@@ -26,7 +26,7 @@ public class SetB1<T> implements Set<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SetB1() {
-		nodes = (Node1<T>[]) Array.newInstance(Node1.class, 2);
+		nodes = (Node1<T>[]) Array.newInstance(Node1.class, 10);
 		idx = 1;
 		size = 0;
 		nodes[0] = new Node1<T>(null);	
@@ -81,7 +81,7 @@ public class SetB1<T> implements Set<T> {
 	@Override
 	public void delete(Pos<T> pos) {
 
-		if (pos.getIndex() < 0 || pos.getIndex() >= size) {
+		if (pos.getIndex() < 0 || pos.getIndex() > nodes.length) {
 			throw new IndexOutOfBoundsException();
 		}
 		
@@ -129,8 +129,8 @@ public class SetB1<T> implements Set<T> {
 			throw new NullPointerException();
 		}
 
-		for (int i = 0; i < size; i++) {
-			if (nodes[i].getElement().getKey().getValue().equals(key.getValue())) {
+		for (int i = 1; i < nodes.length; i++) {
+			if (nodes[i] != null && nodes[i].getElement().getKey().getValue().equals(key.getValue())) {
 				return new Pos<T>(true, nodes[i].getElement(), i);
 			}
 		}

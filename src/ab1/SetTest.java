@@ -15,7 +15,7 @@ public class SetTest {
 	/**
 	 * Instanz der zu testenden Menge.
 	 */
-	private Set<String> set = new SetB2<>();
+	private Set<String> set = new SetC<>();
 	
 	private Pos<String> pos0;
 	private Pos<String> pos1;
