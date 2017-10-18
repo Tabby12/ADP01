@@ -16,6 +16,7 @@ public class SetC<T> implements Set<T> {
 	 * Rechter Wächterknoten.
 	 */
 	private Node2<T> tail;
+	private Counter counter;
 
 	/**
 	 * Anzahl der aktuell in der Menge vorhandenen Elemente.
@@ -33,6 +34,7 @@ public class SetC<T> implements Set<T> {
 		tail.setNext(head);
 
 		size = 0;
+		counter = new Counter();
 	}
 
 	/**
@@ -94,8 +96,10 @@ public class SetC<T> implements Set<T> {
 		// Hole Element vor dem Gesuchten und ändere Referenzen
 		Node2<T> preElementToDelete = getNode(pos.getIndex() - 1);
 		preElementToDelete.setNext(preElementToDelete.getNext().getNext());
+		counter.incrementBy(2);
 
 		size--;
+		counter.increment();
 	}
 
 	@Override
@@ -108,9 +112,11 @@ public class SetC<T> implements Set<T> {
 
 		// Try to find and delete Element
 		Pos<T> pos = find(key);
+		counter.increment();
 		if (pos.isValid()) {
 			delete(pos);
 		}
+		counter.increment();
 	}
 
 	@Override
@@ -127,17 +133,18 @@ public class SetC<T> implements Set<T> {
 		// Setze stopper
 		Element<T> dummyElement = new Element<T>(null, key);
 		tail.setElement(dummyElement);
-
+		counter.incrementBy(4);
 		// Suche stopper
 		while (!curNode.getElement().getKey().equals(key)) {
 			curPos++;
 			curNode = curNode.getNext();
+			counter.incrementBy(3);
 		}
 
 		if (curNode == tail) {
 			return new Pos<T>(false, null, -1);
 		}
-
+		counter.increment();
 		return new Pos<T>(true, curNode.getElement(), curPos);
 	}
 

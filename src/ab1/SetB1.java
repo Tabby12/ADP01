@@ -15,6 +15,7 @@ public class SetB1<T> implements Set<T> {
 	 */
 	private int size;
 	private int idx;
+	private Counter counter;
 
 	/**
 	 * Array zur Datenspeicherung
@@ -30,6 +31,7 @@ public class SetB1<T> implements Set<T> {
 		idx = 1;
 		size = 0;
 		nodes[0] = new Node1<T>(null);	
+		counter = new Counter();
 	}
 
 	/**
@@ -84,19 +86,25 @@ public class SetB1<T> implements Set<T> {
 		if (pos.getIndex() < 0 || pos.getIndex() > nodes.length) {
 			throw new IndexOutOfBoundsException();
 		}
+		counter.increment();
 		
 		if(nodes[pos.getIndex()] != null) {
 			int next = nodes[pos.getIndex()].getNext();
 			int prev = nodes[pos.getIndex()].getPrevious();
+			counter.incrementBy(3);
 			if(nodes[next] != null) {
 				nodes[next].setPrevious(prev);
+				counter.increment();
 			}	
+			counter.increment();
 			if(nodes[prev] != null) {
 				nodes[prev].setNext(next);
+				counter.increment();
 			}
 			nodes[pos.getIndex()] = null;
 			pos.setValid(false);
 			size--;
+			counter.incrementBy(3);
 		}	
 
 //		nodes[pos.getIndex()] = null;
@@ -116,7 +124,9 @@ public class SetB1<T> implements Set<T> {
 		}
 
 		Pos<T> pos = find(key);
+		counter.increment();
 		if (pos.isValid()) {
+			counter.increment();
 			delete(pos);
 		}
 
@@ -128,7 +138,9 @@ public class SetB1<T> implements Set<T> {
 			throw new NullPointerException();
 		}
 		for (int i = 1; i < nodes.length; i++) {
+			counter.increment();
 			if (nodes[i] != null && nodes[i].getElement().getKey().getValue().equals(key.getValue())) {
+				counter.increment();
 				return new Pos<T>(true, nodes[i].getElement(), i);
 			}
 		}

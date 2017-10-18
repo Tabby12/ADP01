@@ -23,10 +23,13 @@ public class SetA<T> implements Set<T> {
 	/**
 	 * Konstruktor.
 	 */
+	private Counter counter;
+	
 	@SuppressWarnings("unchecked")
 	public SetA() {
 		elements = (Element<T>[]) Array.newInstance(Element.class, 2);
 		size = 0;
+		counter = new Counter();
 	}
 
 	/**
@@ -71,18 +74,19 @@ public class SetA<T> implements Set<T> {
 	public void delete(Pos<T> pos) {
 
 		if (pos.isValid()) {
-
 			// Überschreibe Element
 			elements[pos.getIndex()] = null;
 			pos.setValid(false);
-
+			counter.incrementBy(2);
+			
 			// Kopiere alte Elemente vor
 			for (int i = pos.getIndex() + 1; i < size; i++) {
 				elements[i - 1] = elements[i];
+				counter.incrementBy(2);
 			}
 			size--;
 			elements[size] = null;
-
+			counter.incrementBy(2);
 		}
 	}
 
@@ -95,7 +99,9 @@ public class SetA<T> implements Set<T> {
 		}
 		//Löschen des Elements, wenn gefunden
 		Pos<T> pos = find(key);
+		counter.incrementBy(2);
 		if (pos.isValid()) {
+			counter.increment();
 			delete(pos);
 		}
 
@@ -108,9 +114,12 @@ public class SetA<T> implements Set<T> {
 		if (key == null) {
 			throw new NullPointerException();
 		}
+		counter.increment();
 		// Suche Element und gebe Position zurück falls gefunden
 		for (int i = 0; i < size; i++) {
+			counter.increment();
 			if (elements[i].getKey().getValue().equals(key.getValue())) {
+				counter.increment();
 				return new Pos<T>(true, elements[i], i);
 			}
 		}
