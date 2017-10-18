@@ -36,6 +36,10 @@ public class SetC<T> implements Set<T> {
 		size = 0;
 		counter = new Counter();
 	}
+	
+	public Counter getCounter() {
+		return counter;
+	}
 
 	/**
 	 * Liefert den Knoten, der gegebenen Position.

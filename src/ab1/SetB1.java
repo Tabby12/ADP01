@@ -33,6 +33,10 @@ public class SetB1<T> implements Set<T> {
 		nodes[0] = new Node1<T>(null);	
 		counter = new Counter();
 	}
+	
+	public Counter getCounter() {
+		return counter;
+	}
 
 	/**
 	 * Verlängert das Array.

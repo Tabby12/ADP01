@@ -31,6 +31,10 @@ public class SetA<T> implements Set<T> {
 		size = 0;
 		counter = new Counter();
 	}
+	
+	public Counter getCounter() {
+		return counter;
+	}
 
 	/**
 	 * Verlängert das Array.
