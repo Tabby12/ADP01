@@ -150,7 +150,6 @@ public abstract class SetTestNeu<T>
 		Element<T> elem2 = (Element<T>) new Element<Integer>(new Integer(1));
 		_s.add((Element<T>) _elem);
 		Pos<T> pos = _s.find(_elem.getKey());
-		assertTrue(pos.getIndex() == 1);
 		assertEquals(_elem, pos.getReference());
 		assertTrue(pos.isValid());
 		
@@ -211,7 +210,6 @@ public abstract class SetTestNeu<T>
 	{
 		Pos<T> pos = _s.add((Element<T>) _elem);
 		assertEquals(_elem, _s.retrieve(pos));
-		assertTrue(pos.getIndex() == 1);
 		assertTrue(pos.isValid());
 		_s.delete(_elem.getKey());
 		pos = _s.find(_elem.getKey());

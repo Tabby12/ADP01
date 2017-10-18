@@ -50,9 +50,8 @@ public class SetA<T> implements Set<T> {
 		//Prüfen, ob Element bereits in der Menge
 		Pos<T> pos = find(element.getKey());
 
-		if (pos != null) {
+		if (pos.isValid()) {
 			return find(element.getKey());
-
 		}
 
 		// Verlängere Array falls nötig
@@ -115,7 +114,7 @@ public class SetA<T> implements Set<T> {
 				return new Pos<T>(true, elements[i], i);
 			}
 		}
-		return null;
+		return new Pos<T>(false,null,-1);
 	}
 
 	@Override
