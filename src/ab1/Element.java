@@ -29,6 +29,10 @@ public class Element<T> {
 	public Key getKey() {
 		return key;
 	}
+	
+	public void setKey(Key key) {
+		this.key = key;
+	}
 
 	public T getData() {
 		return data;

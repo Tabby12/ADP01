@@ -124,11 +124,9 @@ public class SetB1<T> implements Set<T> {
 
 	@Override
 	public Pos<T> find(Key key) {
-
 		if (key == null) {
 			throw new NullPointerException();
 		}
-
 		for (int i = 1; i < nodes.length; i++) {
 			if (nodes[i] != null && nodes[i].getElement().getKey().getValue().equals(key.getValue())) {
 				return new Pos<T>(true, nodes[i].getElement(), i);

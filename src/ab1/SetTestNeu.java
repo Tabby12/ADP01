@@ -172,15 +172,13 @@ public abstract class SetTestNeu<T>
 		Set<T> t = erzeugeSet();
 		_elem = null;
 		
-		Set<T> unifiedSet = _s.unify(t);
+		Set<T> unifiedSet = erzeugeSet();
 		
 		assertTrue(unifiedSet.size() == 0);
 		unifiedSet.add((Element<T>) new Element<Integer>(new Integer(1000)));
 		unifiedSet = unifiedSet.unify(t);
+		assertTrue(t.size() == 1);
 		assertTrue(unifiedSet.size() == 1);
-		
-		
-		
 		
 		for(int i = 0; i < 5; i++)
 		{
@@ -198,7 +196,7 @@ public abstract class SetTestNeu<T>
 		
 		// s: 5 Elemente, t: 6 Elemente, beide haben eines gemeinsam
 		unifiedSet = _s.unify(t);
-		assertTrue(unifiedSet.size() == 10);
+		assertTrue(unifiedSet.size() == 11);
 		assertEquals(_elem, unifiedSet.find(_elem.getKey()).getReference());
 
 
